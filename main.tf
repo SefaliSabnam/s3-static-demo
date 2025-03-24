@@ -1,6 +1,6 @@
 # Create S3 bucket
 resource "aws_s3_bucket" "static_website" {
-  bucket = var.bucket_name
+  bucket = var.website_bucket_name
 
   tags = {
     Name        = "My Terraform S3 Bucket"
@@ -26,34 +26,28 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "encryption" {
   }
 }
 
-# Configure the bucket for static website hosting
+# Configure the bucket for static website hosting (without error document)
 resource "aws_s3_bucket_website_configuration" "static_website_config" {
   bucket = aws_s3_bucket.static_website.id
 
   index_document {
     suffix = var.index_file
   }
-
-  error_document {
-    key = var.error_file
-  }
 }
 
-#  Disable public access restrictions (this fixes the AccessDenied issue)
+# Disable public access restrictions
 resource "aws_s3_bucket_public_access_block" "static_website_block" {
   bucket                  = aws_s3_bucket.static_website.id
   block_public_acls       = false
-  block_public_policy     = false   # <-- Disable this to allow public bucket policy
+  block_public_policy     = false
   ignore_public_acls      = false
   restrict_public_buckets = false
 }
 
-#  Upload index.html to the bucket
+# Upload index.html to the bucket
 resource "aws_s3_object" "index_html" {
-  bucket = aws_s3_bucket.static_website.id
-  key    = var.index_file
-  source = var.index_file
+  bucket       = aws_s3_bucket.static_website.id
+  key          = var.index_file
+  source       = var.index_file  # Ensure the file exists in the working directory
   content_type = "text/html"
 }
-
-
