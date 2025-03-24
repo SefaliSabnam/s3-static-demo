@@ -39,38 +39,20 @@ resource "aws_s3_bucket_website_configuration" "static_website_config" {
   }
 }
 
-# Allow public access by disabling public access restrictions
+#  Disable public access restrictions (this fixes the AccessDenied issue)
 resource "aws_s3_bucket_public_access_block" "static_website_block" {
   bucket                  = aws_s3_bucket.static_website.id
   block_public_acls       = false
   block_public_policy     = false   # <-- Disable this to allow public bucket policy
+  ignore_public_acls      = false
   restrict_public_buckets = false
 }
 
-# Add a bucket policy for public read access
-resource "aws_s3_bucket_policy" "public_read_policy" {
-  bucket = aws_s3_bucket.static_website.id
-  policy = <<POLICY
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Sid": "PublicReadGetObject",
-      "Effect": "Allow",
-      "Principal": "*",
-      "Action": "s3:GetObject",
-      "Resource": "arn:aws:s3:::${var.bucket_name}/*"
-    }
-  ]
-}
-POLICY
-}
-
-# Upload index.html to the bucket
+#  Upload index.html to the bucket
 resource "aws_s3_object" "index_html" {
-  bucket       = aws_s3_bucket.static_website.id
-  key          = var.index_file
-  source       = var.index_file
+  bucket = aws_s3_bucket.static_website.id
+  key    = var.index_file
+  source = var.index_file
   content_type = "text/html"
 }
 
