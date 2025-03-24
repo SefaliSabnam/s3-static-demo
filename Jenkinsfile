@@ -19,7 +19,7 @@ pipeline {
                         terraform init -backend-config="bucket=my-terraform-state-bucket" \
                                        -backend-config="key=terraform.tfstate" \
                                        -backend-config="region=ap-south-1" \
-                                       -backend-config="dynamodb_table=terraform-state-lock"
+                                       -backend-config="use_lockfile=true"
                     '''
                 }
             }
