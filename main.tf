@@ -7,9 +7,6 @@ resource "random_id" "bucket_suffix" {
 resource "aws_s3_bucket" "static_website" {
   bucket        = "my-static-website-rony2025-${random_id.bucket_suffix.hex}"  # Ensure the bucket name is globally unique
   force_destroy = true  # Allow deletion even if the bucket contains objects
-  
-  # Remove the object_ownership argument as it's not supported in version 5.90.0
-  # object_ownership = "BucketOwnerEnforced"  # Comment or remove this line
 }
 
 # Configure the S3 bucket as a static website
@@ -35,20 +32,20 @@ resource "aws_s3_bucket_public_access_block" "static_website" {
   restrict_public_buckets = false
 }
 
-# Upload the index.html file to the S3 bucket
+# Upload the index.html file to the S3 bucket (without ACLs)
 resource "aws_s3_object" "index_html" {
   bucket       = aws_s3_bucket.static_website.id
   key          = "index.html"
   source       = "index.html"  # Ensure this file exists locally
   content_type = "text/html"
-  acl          = "public-read"  # Allow public access to the index.html file
+  # Removed acl setting to avoid ACL conflicts
 }
 
-# Optionally, you can upload an error.html file
+# Optionally, you can upload an error.html file (without ACLs)
 resource "aws_s3_object" "error_html" {
   bucket       = aws_s3_bucket.static_website.id
   key          = "error.html"
   source       = "error.html"  # Ensure this file exists locally
   content_type = "text/html"
-  acl          = "public-read"  # Allow public access to the error.html file
+  # Removed acl setting to avoid ACL conflicts
 }
