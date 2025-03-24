@@ -2,7 +2,9 @@
 resource "aws_s3_bucket" "static_website" {
   bucket        = "my-static-website-rony2025"  # Ensure the bucket name is globally unique
   force_destroy = true  # Allow deletion even if the bucket contains objects
-  acl           = "public-read"  # Set bucket ACL to public-read so objects can be publicly accessible
+  
+  # Disable ACLs (use ObjectOwnership settings)
+  object_ownership = "BucketOwnerEnforced"
 }
 
 # Configure the S3 bucket as a static website
