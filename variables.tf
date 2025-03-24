@@ -1,11 +1,11 @@
-variable "bucket_name" {
-  default = "my-terraform-s3-jenkins-1"
+variable "aws_region" {
+  default = "ap-south-1"
 }
 
-variable "index_file" {
-  default = "index.html"
+variable "website_bucket_name" {
+  default = "my-static-website-bucket"
 }
 
-variable "error_file" {
-  default = "error.html"
+variable "state_bucket_name" {
+  default = "my-terraform-state-bucket"
 }
