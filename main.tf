@@ -3,8 +3,8 @@ resource "aws_s3_bucket" "static_website" {
   bucket        = "my-static-website-rony2025"  # Ensure the bucket name is globally unique
   force_destroy = true  # Allow deletion even if the bucket contains objects
   
-  # Disable ACLs (use ObjectOwnership settings)
-  object_ownership = "BucketOwnerEnforced"
+  # Remove the object_ownership argument as it's not supported in version 5.90.0
+  # object_ownership = "BucketOwnerEnforced"  # Comment or remove this line
 }
 
 # Configure the S3 bucket as a static website
