@@ -16,10 +16,10 @@ pipeline {
             steps {
                 script {
                     sh '''
-                        terraform init -backend-config="bucket=my-terraform-state-bucket" \
+                        terraform init -backend-config="bucket=my-terraform-s3-jenkins" \
                                        -backend-config="key=terraform.tfstate" \
                                        -backend-config="region=ap-south-1" \
-                                       -backend-config="use_lockfile=true"
+                                       -backend-config="dynamodb_table=terraform-state-lock"
                     '''
                 }
             }
@@ -70,4 +70,4 @@ pipeline {
 
 def slackNotification(message) {
     slackSend(channel: '#jenkins', message: message)
-}
+} 
