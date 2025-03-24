@@ -7,5 +7,5 @@ variable "website_bucket_name" {
 }
 
 variable "state_bucket_name" {
-  default = "my-terraform-state-bucket"
+  default = "my-terraform-s3-jenkins"
 }
