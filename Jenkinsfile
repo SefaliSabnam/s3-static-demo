@@ -15,12 +15,7 @@ pipeline {
         stage('Terraform Init') {
             steps {
                 script {
-                    sh '''
-                        terraform init -backend-config="bucket=my-terraform-s3-jenkins" \
-                                       -backend-config="key=terraform.tfstate" \
-                                       -backend-config="region=ap-south-1" \
-                                       -backend-config="dynamodb_table=terraform-state-lock"
-                    '''
+                    sh 'terraform init'
                 }
             }
         }
@@ -45,7 +40,7 @@ pipeline {
                     if (prevCommit && latestCommit && prevCommit != latestCommit) {
                         echo "Changes detected! Running terraform apply..."
                         sh 'terraform apply -auto-approve tfplan'
-                        slackNotification("Terraform apply successful!")
+                        slackNotification("Terraform apply successful! ")
                     } else {
                         echo "No changes detected. Skipping terraform apply."
                     }
@@ -57,12 +52,12 @@ pipeline {
     post {
         success {
             script {
-                slackNotification("Terraform deployment successful!")
+                slackNotification("Terraform deployment successful! ")
             }
         }
         failure {
             script {
-                slackNotification("Terraform deployment failed!")
+                slackNotification("Terraform deployment failed! ")
             }
         }
     }
@@ -70,4 +65,4 @@ pipeline {
 
 def slackNotification(message) {
     slackSend(channel: '#jenkins', message: message)
-} 
+}
