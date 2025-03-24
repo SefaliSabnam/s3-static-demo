@@ -15,7 +15,11 @@ pipeline {
         stage('Terraform Init') {
             steps {
                 script {
-                    sh 'terraform init'
+                    def initStatus = sh(script: 'terraform init -migrate-state', returnStatus: true)
+                    if (initStatus != 0) {
+                        echo "Backend configuration changed. Running terraform init -reconfigure..."
+                        sh 'terraform init -reconfigure'
+                    }
                 }
             }
         }
@@ -34,10 +38,14 @@ pipeline {
             }
             steps {
                 script {
-                    def prevCommit = sh(script: 'git rev-parse $GIT_PREVIOUS_SUCCESSFUL_COMMIT', returnStdout: true).trim()
+                    def prevCommit = sh(script: 'git rev-parse --verify --quiet $GIT_PREVIOUS_SUCCESSFUL_COMMIT || echo ""', returnStdout: true).trim()
                     def latestCommit = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
-                    
-                    if (prevCommit && latestCommit && prevCommit != latestCommit) {
+
+                    if (!prevCommit) {
+                        echo "No previous successful commit found. Running terraform apply..."
+                        sh 'terraform apply -auto-approve tfplan'
+                        slackNotification("Terraform apply successful! ")
+                    } else if (prevCommit != latestCommit) {
                         echo "Changes detected! Running terraform apply..."
                         sh 'terraform apply -auto-approve tfplan'
                         slackNotification("Terraform apply successful! ")
