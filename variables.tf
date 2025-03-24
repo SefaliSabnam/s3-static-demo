@@ -3,11 +3,9 @@ variable "aws_region" {
 }
 
 variable "state_bucket_name" {
-  default = "my-terraform-s3-jenkins"
+  default = "my-terraform-s3-jenkins-rony2025"  
 }
 
 variable "index_file" {
   default = "index.html"
 }
-
-
