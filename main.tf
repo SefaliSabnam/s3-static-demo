@@ -1,6 +1,11 @@
-# Create the S3 bucket for the static website
+# Generate a random ID to make the bucket name unique
+resource "random_id" "bucket_suffix" {
+  byte_length = 4
+}
+
+# Create the S3 bucket for the static website with a unique name
 resource "aws_s3_bucket" "static_website" {
-  bucket        = "my-static-website-rony2025"  # Ensure the bucket name is globally unique
+  bucket        = "my-static-website-rony2025-${random_id.bucket_suffix.hex}"  # Ensure the bucket name is globally unique
   force_destroy = true  # Allow deletion even if the bucket contains objects
   
   # Remove the object_ownership argument as it's not supported in version 5.90.0
