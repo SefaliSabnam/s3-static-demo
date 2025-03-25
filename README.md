@@ -20,7 +20,8 @@ This project automates the deployment of a static website on AWS S3 using Terraf
 
 ## ARCHITECTURE
 
-![alt text](terraform_s3.drawio.png)
+![Architecture Diagram](terraform%20s3.drawio%20(1).png)
+
 
 - **GITHUB**: Stores Terraform and Jenkins configuration files.
 - **VISUAL STUDIO CODE**: Used for writing and managing Terraform and Jenkins files.
@@ -49,7 +50,6 @@ This project automates the deployment of a static website on AWS S3 using Terraf
 ├── README.docx # Project documentation
 
 ## TERRAFORM SETUP
-
 - Define the AWS provider and required variables in `provider.tf` and `variables.tf`.
 - Create an S3 bucket for static website hosting in `main.tf`.
 - Configure public access and bucket policies.
@@ -57,13 +57,11 @@ This project automates the deployment of a static website on AWS S3 using Terraf
 - Store the Terraform state file in an S3 backend (if applicable).
 
 ## JENKINS AUTOMATION
-
 - Add the repository to Jenkins.
 - Set up a multibranch pipeline.
 - Use the provided `Jenkinsfile` for automation.
 
 ## DEPLOYMENT WORKFLOW
-
 1. Jenkins fetches the Terraform code from GitHub.
 2. Runs Terraform commands (`init`, `apply`) to create/update infrastructure.
 3. Deploys website files (`index.html`, `error.html`) to S3.
@@ -71,39 +69,33 @@ This project automates the deployment of a static website on AWS S3 using Terraf
 5. Use AWS CloudWatch for monitoring and logging.
 
 ## EXPECTED OUTPUT
-
 Once the deployment is successful, the following outputs are expected:
 
 - **Terraform Output**:
-
   - S3 bucket is successfully created.
   - Website files (`index.html`, `error.html`) are uploaded.
   - Public access is enabled, allowing users to view the site.
   - Terraform state file is stored in the configured S3 backend.
 
 - **Jenkins Pipeline Output**:
-
   - The pipeline successfully initializes, validates, and applies the Terraform configuration.
   - Website files are deployed to S3.
   - Terraform state file upload confirmation in the logs.
   - Confirmation message showing a successful deployment.
 
 - **Website Access**:
-
   - Open the provided S3 static website URL in a browser.
   - The homepage (`index.html`) should be displayed.
   - Navigating to a non-existent page should show the custom `error.html` page.
 
 ## DESTROYING THE INFRASTRUCTURE
-
 To remove all AWS resources created by Terraform:
 ```sh
 terraform destroy -auto-approve
 
-LICENSE
 
-This project is licensed under the MIT License. See LICENSE for details.
+## LICENSE
+This project is licensed under the [MIT License](LICENSE).
 
-CONTRIBUTION
-
-Feel free to contribute to this project by submitting pull requests.
+## CONTRIBUTION
+Contributions are welcome! Feel free to submit pull requests to enhance this project.
